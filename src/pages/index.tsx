@@ -112,9 +112,6 @@ export default function Home(props: PageProps): ReactElement {
                 <title>Presença Suap IFRN</title>
                 <meta name="description" content="Contabilizar presenças nas aulas remotas" />
                 <link rel="icon" href="/favicon.ico" />
-
-                <Script defer src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossOrigin="anonymous" referrerPolicy="no-referrer"></Script>
-                <Script defer src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></Script>
             </Head>
 
             {isAuth && (
@@ -154,6 +151,9 @@ export default function Home(props: PageProps): ReactElement {
             ) || (
                 <a href={loginUrl}>Logar no suap</a>
             )}
+
+            <Script defer src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossOrigin="anonymous" referrerPolicy="no-referrer"></Script>
+            <Script defer src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></Script>
         </div>
     )
 }
