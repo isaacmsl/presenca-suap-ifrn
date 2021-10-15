@@ -152,8 +152,14 @@ export default function Home(props: PageProps): ReactElement {
                 <a href={loginUrl}>Logar no suap</a>
             )}
 
-            <Script defer src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossOrigin="anonymous" referrerPolicy="no-referrer"></Script>
-            <Script defer src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></Script>
+            <Script 
+                src="/scripts/jquery-3.6.0.min.js"
+                strategy="beforeInteractive"
+            />
+            <Script 
+                src="/scripts/js.cookie.min.js"
+                strategy="beforeInteractive"
+            />
         </div>
     )
 }
