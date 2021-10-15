@@ -5,6 +5,7 @@ import { SuapClient } from "../lib/SuapClient"
 import { IUser } from '../types/IUser';
 import axios from 'axios';
 import httpStatus from '../lib/httpStatus';
+import Script from 'next/script';
 
 interface PageProps {
     SUAP_URL: string,
@@ -151,8 +152,8 @@ export default function Home(props: PageProps): ReactElement {
                 <a href={loginUrl}>Logar no suap</a>
             )}
 
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossOrigin="anonymous" referrerPolicy="no-referrer"></script>
-            <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+            <Script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossOrigin="anonymous" referrerPolicy="no-referrer"></Script>
+            <Script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></Script>
         </div>
     )
 }
