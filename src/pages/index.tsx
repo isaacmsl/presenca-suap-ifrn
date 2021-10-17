@@ -6,6 +6,7 @@ import { IUser } from '../types/IUser';
 import axios from 'axios';
 import httpStatus from '../lib/httpStatus';
 import Script from 'next/script';
+import { useRouter } from 'next/dist/client/router';
 
 interface PageProps {
     SUAP_URL: string,
@@ -15,9 +16,9 @@ interface PageProps {
 }
 
 export default function Home(props: PageProps): ReactElement {
+    const router = useRouter();
     const [user, setUser] = useState<IUser>();
     const [presentes, setPresentes] = useState<String[]>();
-    const [isAuth, setIsAuth] = useState(false);
     const [isDocente, setIsDocente] = useState(false);
     const [codigoAula, setCodigoAula] = useState<String>("");
 
@@ -32,13 +33,14 @@ export default function Home(props: PageProps): ReactElement {
     useEffect(() => {
         suapClient.init();
 
-        if (suapClient.isAuthenticated()) {
-            suapClient.getResource((response: IUser) => {
-                setUser(response);
-                setIsDocente(response.identificacao.length < 13);
-            });
-            setIsAuth(true);
+        if (!suapClient.isAuthenticated()) {
+            router.push("/login");
         }
+        
+        suapClient.getResource((response: IUser) => {
+            setUser(response);
+            setIsDocente(response.identificacao.length < 13);
+        });
     }, []);
 
     async function handleCriarAula() {
@@ -106,57 +108,135 @@ export default function Home(props: PageProps): ReactElement {
     function handleLogout() {
         suapClient.init();
         suapClient.logout();
+        router.push("/login");
     }
 
     return (
-        <div>
+        <div className="bg-primary p-8 min-h-screen nax-w-screen grid place-items-center">
             <Head>
                 <title>Presença Suap IFRN</title>
                 <meta name="description" content="Contabilizar presenças nas aulas remotas" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            {isAuth && (
-                <>
-                    <h1>Olá, {user?.nome}</h1>
-                    <main>
-                    <label htmlFor="codigo-aula">Código da aula: </label>
-                    <input 
-                        id="codigo-aula"
+            <main className="text-white grid gap-12">
+                <header className="grid gap-4 w-full max-w-xs text-center">
+                    <h1 className="text-2xl font-bold">
+                        Olá, {user?.nome}
+                    </h1>
+                    {isDocente && (
+                        <h2>Docente no IFRN.</h2>
+                    ) || (
+                        <h2>Discente no IFRN.</h2>
+                    )}
+                </header>
+                <div className="input-container">
+                    <label
+                        htmlFor="input-codigo-aula"
+                        className="font-bold"
+                    >
+                        Código da aula
+                    </label>
+                    <input
+                        id="input-codigo-aula"
                         type="text"
+                        className="input"
+                        placeholder="Aula super legal"
                         value={String(codigoAula)}
                         onChange={e => setCodigoAula(e.target.value)}
                     />
-                    <button
-                        onClick={marcarPresenca}
-                    >
-                        Marcar presença
-                    </button>
-                    </main>
-                    {isDocente && (
-                        <>
-                            <button onClick={handleCriarAula}>
+                </div>
+                <div className="grid gap-4">
+                    {!isDocente && (
+                        <button
+                            onClick={marcarPresenca}
+                            className="bg-green-700 block p-4 rounded-md border-2 border-green-600 text-center"
+                        >
+                            Marcar presença
+                        </button>
+                    ) || (
+                        <section className="grid sm:grid-cols-2 gap-4">
+                            <button
+                                onClick={handleCriarAula}
+                                className="btn-cta"
+                            >
                                 Criar aula
                             </button>
-                            <button onClick={handleListarPresentes}>
-                                Lista de presentes
+                            <button
+                                onClick={handleListarPresentes}
+                                className="btn-cta"
+                            >
+                                Listar presentes
                             </button>
-                        </>
+                        </section>
                     )}
-                    <button onClick={handleLogout}>
-                        Sair
+                    <button
+                        onClick={handleLogout}
+                        className="btn-ghost"
+                    >
+                        Deslogar
                     </button>
-                    <ul>
-                    {presentes?.length && (
-                        presentes?.map((presente, index) => (
-                            <li key={`presente${index}`}>{presente}</li>
-                        ))
-                    )}
-                    </ul>
-                </>
-            ) || (
-                <a href={loginUrl}>Logar no suap</a>
-            )}
+                </div>
+                {isDocente && presentes?.length && (
+                    <section className="grid gap-6">
+                        <header>
+                            <h2 className="font-bold text-xl">Presentes</h2>
+                            <h3>{presentes.length} alunos</h3>
+                        </header>
+                        <ul className="rounded-md overflow-hidden border-2 border-gray-800">
+                            {presentes.map((presente, index) => (
+                                <li 
+                                    key={`aluno${index}`}
+                                    className={`
+                                        px-6 py-4 
+                                        ${index % 2 === 0 ? "bg-secondary" : "bg-primary-dark"} 
+                                    `}
+                                >
+                                    {presente}
+                                </li>
+                            ))}
+                        </ul>
+                    </section>
+                )}
+            </main>
+
+            {/* <>
+                <h1>Olá, {user?.nome}</h1>
+                <main>
+                <label htmlFor="codigo-aula">Código da aula: </label>
+                <input 
+                    id="codigo-aula"
+                    type="text"
+                    value={String(codigoAula)}
+                    onChange={e => setCodigoAula(e.target.value)}
+                />
+                <button
+                    onClick={marcarPresenca}
+                >
+                    Marcar presença
+                </button>
+                </main>
+                {isDocente && (
+                    <>
+                        <button onClick={handleCriarAula}>
+                            Criar aula
+                        </button>
+                        <button onClick={handleListarPresentes}>
+                            Lista de presentes
+                        </button>
+                    </>
+                )}
+                <button onClick={handleLogout}>
+                    Sair
+                </button>
+                <ul>
+                {presentes?.length && (
+                    presentes?.map((presente, index) => (
+                        <li key={`presente${index}`}>{presente}</li>
+                    ))
+                )}
+                </ul>
+            </> */}
 
             <Script 
                 src="/scripts/jquery-3.6.0.min.js"
