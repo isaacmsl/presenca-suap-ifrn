@@ -18,6 +18,7 @@ export default function Home(props: PageProps): ReactElement {
     const [user, setUser] = useState<IUser>();
     const [presentes, setPresentes] = useState<String[]>();
     const [isAuth, setIsAuth] = useState(false);
+    const [isDocente, setIsDocente] = useState(false);
     const [codigoAula, setCodigoAula] = useState<String>("");
 
     const suapClient = new SuapClient(
@@ -34,6 +35,7 @@ export default function Home(props: PageProps): ReactElement {
         if (suapClient.isAuthenticated()) {
             suapClient.getResource((response: IUser) => {
                 setUser(response);
+                setIsDocente(response.identificacao.length < 13);
             });
             setIsAuth(true);
         }
@@ -131,12 +133,16 @@ export default function Home(props: PageProps): ReactElement {
                         Marcar presença
                     </button>
                     </main>
-                    <button onClick={handleCriarAula}>
-                        Criar aula
-                    </button>
-                    <button onClick={handleListarPresentes}>
-                        Lista de presentes
-                    </button>
+                    {isDocente && (
+                        <>
+                            <button onClick={handleCriarAula}>
+                                Criar aula
+                            </button>
+                            <button onClick={handleListarPresentes}>
+                                Lista de presentes
+                            </button>
+                        </>
+                    )}
                     <button onClick={handleLogout}>
                         Sair
                     </button>
