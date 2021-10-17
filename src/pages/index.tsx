@@ -7,6 +7,7 @@ import axios from 'axios';
 import httpStatus from '../lib/httpStatus';
 import Script from 'next/script';
 import { useRouter } from 'next/dist/client/router';
+import toast, { Toaster } from "react-hot-toast"
 
 interface PageProps {
     SUAP_URL: string,
@@ -28,7 +29,6 @@ export default function Home(props: PageProps): ReactElement {
         props.REDIRECT_URI, 
         props.SCOPE
     );
-    const loginUrl = suapClient.getLoginURL();
 
     useEffect(() => {
         suapClient.init();
@@ -45,6 +45,7 @@ export default function Home(props: PageProps): ReactElement {
 
     async function handleCriarAula() {
         if (codigoAula) {
+            const toastId = toast.loading("Criando aula...");
             try {
                 const response = await axios.post("/api/aulas", {
                     matriculaDocente: user?.identificacao,
@@ -54,18 +55,25 @@ export default function Home(props: PageProps): ReactElement {
                 })
 
                 if (response.status == httpStatus.CREATED) {
-                    alert("Aula cadastrada.");
+                    toast.success("Aula cadastrada", {
+                        id: toastId,
+                    });
                 } else {
-                    alert("Não foi possível criar a aula.");
+                    toast.error("Não foi possível criar a aula", {
+                        id: toastId,
+                    });
                 }
             } catch (error) {
-                alert("Não foi possível criar a aula.");
+                toast.error("Não foi possível criar a aula", {
+                    id: toastId,
+                });
             }
         }
     }
 
     async function marcarPresenca() {
         if (codigoAula) {
+            const toastId = toast.loading("Marcando presença...");
             try {
                 const response = await axios.post("/api/presencas", {
                     matriculaDiscente: user?.identificacao,
@@ -74,17 +82,23 @@ export default function Home(props: PageProps): ReactElement {
                 })
 
                 if (response.status == httpStatus.CREATED) {
-                    alert("Presença cadastrada.");
-                } else if (response.status == httpStatus.NOT_MODIFIED) {
-                    alert("Você já marcou a presença.");
+                    toast.success("Presença marcada", {
+                        id: toastId,
+                    });
                 } else {
-                    alert("Não foi possível marcar a presença.");
+                    toast.error("Não foi possível marcar a presença", {
+                        id: toastId,
+                    });
                 }
             } catch (error: any) {
                 if (error.response.status == httpStatus.NOT_MODIFIED) {
-                    alert("Você já marcou a presença.");
+                    toast.error("Você já marcou a presença", {
+                        id: toastId,
+                    });
                 } else {
-                    alert("Não foi possível marcar a presença.");
+                    toast.error("Não foi possível marcar a presença", {
+                        id: toastId,
+                    });
                 }
             }
         }
@@ -92,6 +106,7 @@ export default function Home(props: PageProps): ReactElement {
 
     async function handleListarPresentes() {
         if (codigoAula) {
+            const toastId = toast.loading("Listando presentes...");
             try {
                 const response = await axios.post("/api/presentes", {
                     matriculaDocente: user?.identificacao,
@@ -99,8 +114,13 @@ export default function Home(props: PageProps): ReactElement {
                 })
 
                 setPresentes((response.data as any).presentes);
+                toast.success("Alunos presentes listados", {
+                    id: toastId,
+                });
             } catch (error) {
-                alert("Você não criou esta aula.");
+                toast.error("Você não criou esta aula", {
+                    id: toastId,
+                });
             }
         }
     }
@@ -113,6 +133,15 @@ export default function Home(props: PageProps): ReactElement {
 
     return (
         <div className="bg-primary p-8 min-h-screen nax-w-screen grid place-items-center">
+            <Toaster
+                toastOptions={{
+                    style: {
+                        background: "#333",
+                        color: "#fff",
+                        border: "solid 2px #404040",
+                    },
+                }}
+            />
             <Head>
                 <title>Presença Suap IFRN</title>
                 <meta name="description" content="Contabilizar presenças nas aulas remotas" />
@@ -177,14 +206,14 @@ export default function Home(props: PageProps): ReactElement {
                         Deslogar
                     </button>
                 </div>
-                {isDocente && presentes?.length && (
+                {isDocente && Number(presentes?.length) >= 1 && (
                     <section className="grid gap-6">
                         <header>
                             <h2 className="font-bold text-xl">Presentes</h2>
-                            <h3>{presentes.length} alunos</h3>
+                            <h3>{presentes?.length} alunos</h3>
                         </header>
                         <ul className="rounded-md overflow-hidden border-2 border-gray-800">
-                            {presentes.map((presente, index) => (
+                            {presentes?.map((presente, index) => (
                                 <li 
                                     key={`aluno${index}`}
                                     className={`
@@ -199,44 +228,6 @@ export default function Home(props: PageProps): ReactElement {
                     </section>
                 )}
             </main>
-
-            {/* <>
-                <h1>Olá, {user?.nome}</h1>
-                <main>
-                <label htmlFor="codigo-aula">Código da aula: </label>
-                <input 
-                    id="codigo-aula"
-                    type="text"
-                    value={String(codigoAula)}
-                    onChange={e => setCodigoAula(e.target.value)}
-                />
-                <button
-                    onClick={marcarPresenca}
-                >
-                    Marcar presença
-                </button>
-                </main>
-                {isDocente && (
-                    <>
-                        <button onClick={handleCriarAula}>
-                            Criar aula
-                        </button>
-                        <button onClick={handleListarPresentes}>
-                            Lista de presentes
-                        </button>
-                    </>
-                )}
-                <button onClick={handleLogout}>
-                    Sair
-                </button>
-                <ul>
-                {presentes?.length && (
-                    presentes?.map((presente, index) => (
-                        <li key={`presente${index}`}>{presente}</li>
-                    ))
-                )}
-                </ul>
-            </> */}
 
             <Script 
                 src="/scripts/jquery-3.6.0.min.js"
