@@ -5,6 +5,7 @@ import httpStatus from "../../lib/httpStatus";
 import { Aula } from "../../models/Aula";
 import { IUser } from "../../types/IUser";
 import { IPresenca } from "../../types/IPresenca";
+import { IPresente } from "../../types/IPresente";
 
 export default async function presentes(req: NextApiRequest, res: NextApiResponse): Promise<void> {
     const { matriculaDocente, codigoAula } = req.body;
@@ -16,7 +17,13 @@ export default async function presentes(req: NextApiRequest, res: NextApiRespons
         if (aulaExiste) {
             try {
                 const presentesDocs: IPresenca[] = await Presenca.find({ codigoAula });
-                const presentes = presentesDocs.map(presente => presente.nomeDiscente);
+                const presentes: IPresente[] = presentesDocs.map(presente => {
+                    return {
+                        nome: presente.nomeDiscente,
+                        matricula: presente.matriculaDiscente,
+                        data: presente._dataCadastro.toLocaleString()
+                    };
+                });
                 
                 res.status(httpStatus.OK);
                 return res.json({ presentes });
