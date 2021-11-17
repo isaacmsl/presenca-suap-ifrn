@@ -1,34 +1,34 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Sobre
 
-## Getting Started
+Este projeto tem como objetivo auxiliar docentes do IFRN a contabilizarem as presenças nas aulas, integrando os alunos que assistem presencialmente e virtualmente.
 
-First, run the development server:
+## Quero contribuir ❤️
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+**Pré-requisitos:**
+- HTML, CSS e Javascript
+- [NextJS](https://nextjs.org/) (o básico)
+- [Tailwindcss](https://tailwindcss.com/) (se você sabe CSS então fica fácil)
+- [MongoDB](https://www.mongodb.com/) e [Mongoose](https://mongoosejs.com/) (se você pretende mexer com o back-end)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Possuindo conhecimento em pelo menos um desses, acesse a [área de issues](https://github.com/isaacmsl/presenca-suap-ifrn/issues) para conhecer ou criar as necessidades deste projeto. 
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Como usar?
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+O intuito é simplicidade. 
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+- **Discentes:** logar no SUAP e informar o código da presença;
+- **Docente:** logar no SUAP, criar o código da presença e compartilhar com os alunos.
 
-## Learn More
+Os docentes possuem algumas funcionalidades extras. São elas atualmente:
 
-To learn more about Next.js, take a look at the following resources:
+- **Listar alunos por código de presença:** ao informar o código de presença, consegue visualizar todos os alunos que marcaram a presença.
+- A próxima funcionalidade pode ser sua. Contribua ❤️
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📝 Licença
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Esse projeto está sob licença. Veja o arquivo [LICENÇA](LICENSE.md) para mais detalhes.
 
-## Deploy on Vercel
+## Autor
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+| [<img src="https://avatars3.githubusercontent.com/u/31693006?s=460&v=4" width=115><br><sub>@isaacmsl</sub>](https://github.com/isaacmsl) |
+| :---: |
