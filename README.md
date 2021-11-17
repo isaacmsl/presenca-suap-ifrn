@@ -1,3 +1,10 @@
+<h1 align="center">Presença Suap IFRN</h1>
+
+<p align="center">
+  <img src="https://i.ibb.co/Rpn28jg/index.png" width="50%" alt="Mockup do projeto">
+</p>
+
+
 ## Sobre
 
 Este projeto tem como objetivo auxiliar docentes do IFRN a contabilizarem as presenças nas aulas, integrando os alunos que assistem presencialmente e virtualmente.
