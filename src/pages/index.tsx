@@ -35,12 +35,12 @@ export default function Home(props: PageProps): ReactElement {
 
         if (!suapClient.isAuthenticated()) {
             router.push("/login");
+        } else {
+            suapClient.getResource((response: IUser) => {
+                setUser(response);
+                setIsDocente(response.identificacao.length < 13);
+            });
         }
-        
-        suapClient.getResource((response: IUser) => {
-            setUser(response);
-            setIsDocente(response.identificacao.length < 13);
-        });
     }, []);
 
     async function handleCriarAula() {
