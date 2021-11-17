@@ -3,6 +3,7 @@ import Head from 'next/head'
 import { ReactElement, useEffect, useState } from 'react'
 import { SuapClient } from "../lib/SuapClient"
 import { IUser } from '../types/IUser';
+import { IPresente } from '../types/IPresente';
 import axios from 'axios';
 import httpStatus from '../lib/httpStatus';
 import Script from 'next/script';
@@ -19,7 +20,7 @@ interface PageProps {
 export default function Home(props: PageProps): ReactElement {
     const router = useRouter();
     const [user, setUser] = useState<IUser>();
-    const [presentes, setPresentes] = useState<String[]>();
+    const [presentes, setPresentes] = useState<IPresente[]>();
     const [isDocente, setIsDocente] = useState(false);
     const [codigoAula, setCodigoAula] = useState<String>("");
 
@@ -221,7 +222,18 @@ export default function Home(props: PageProps): ReactElement {
                                         ${index % 2 === 0 ? "bg-secondary" : "bg-primary-dark"} 
                                     `}
                                 >
-                                    {presente}
+                                    <section className="grid gap-2">
+                                        <h3>
+                                            {presente.nome} ({presente.matricula})
+                                        </h3>
+                                        <ul>
+                                            {presente.data.length && (
+                                                <li className="text-gray-600">
+                                                    {presente.data}
+                                                </li>
+                                            )}
+                                        </ul>
+                                    </section>
                                 </li>
                             ))}
                         </ul>
